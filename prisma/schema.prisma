@@ -29,17 +29,16 @@ enum product_status {
 }
 
 model users {
-  id                       Int         @id @default(autoincrement())
+  id                       Int       @id @default(autoincrement())
   name                     String
   email                    String
   contact_number           String
   contact_number_extension String
   role                     user_type
   password                 String
-  email_verification_code  String
-  email_verified           Boolean     @default(false)
-  deleted                  Boolean     @default(false)
-  status                   user_status @default(ACTIVE)
+  email_verification_code  String?
+  email_verified           Boolean   @default(false)
+  deleted                  Boolean   @default(false)
 
   @@unique([contact_number, contact_number_extension])
   @@unique([email])
@@ -49,11 +48,13 @@ model users {
 }
 
 model products {
-  id         Int            @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   name       String
   price      Int
   currency   String
-  created_at DateTime
-  deleted    Boolean        @default(false)
-  status     product_status
+  created_at DateTime? @default(now())
+  deleted    Boolean   @default(false)
+
+  @@unique([name])
+  @@index([name])
 }
