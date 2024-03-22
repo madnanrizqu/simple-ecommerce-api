@@ -1,8 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { generateJson } from "../../utils/genJson";
-import { getUserById, getUsers } from "../services/user.services";
-import { UserSanitized } from "../schemas/auth.schema";
-import { GetUserParams } from "../schemas/user.schema";
+import {
+  getUserById,
+  getUsers,
+  updateUserById,
+} from "../services/user.services";
+import {
+  GetUserParams,
+  UpdateUserBody,
+  UpdateUserParams,
+} from "../schemas/user.schema";
+import bcrypt from "bcryptjs";
 
 export const getMeHandler = async (
   req: Request,
@@ -67,6 +75,49 @@ export const getUserHandler = async (
       generateJson({
         code: 200,
         data: user,
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUserHandler = async (
+  req: Request<UpdateUserParams, {}, UpdateUserBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = Number(req.params.userId);
+
+    const user = await getUserById(userId);
+
+    if (!user) {
+      return res.status(404).json(
+        generateJson({
+          code: 404,
+          message: "User not found",
+        })
+      );
+    }
+
+    const updatedUser = await updateUserById(userId, {
+      contact_number: req.body.contactNumber,
+      contact_number_extension: req.body.contactNumberExtension,
+      name: req.body.name,
+      status: req.body.status,
+      email: req.body.email,
+      ...(req.body.password
+        ? {
+            password: await bcrypt.hash(req.body.password, 12),
+          }
+        : {}),
+    });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: updatedUser,
       })
     );
   } catch (error) {

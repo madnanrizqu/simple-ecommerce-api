@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import db from "../../db";
 
 export const getUsers = async () => {
@@ -6,4 +7,11 @@ export const getUsers = async () => {
 
 export const getUserById = async (userId: number) => {
   return await db.users.findUnique({ where: { id: userId } });
+};
+
+export const updateUserById = async (
+  userId: number,
+  data: Prisma.usersUpdateInput
+) => {
+  return await db.users.update({ where: { id: userId }, data });
 };
