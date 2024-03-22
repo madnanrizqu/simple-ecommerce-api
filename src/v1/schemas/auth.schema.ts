@@ -33,3 +33,16 @@ export const verifyEmailSchema = object({
 });
 
 export type VerifyEmailParams = TypeOf<typeof verifyEmailSchema>["params"];
+
+export const loginUserSchema = object({
+  body: object({
+    email: string({
+      required_error: "Email address is required",
+    }).email("Invalid email address"),
+    password: string({
+      required_error: "Password is required",
+    }).min(6, "Invalid email or password"),
+  }),
+});
+
+export type LoginUserBody = TypeOf<typeof loginUserSchema>["body"];

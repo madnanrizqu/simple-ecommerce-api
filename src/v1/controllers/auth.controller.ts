@@ -4,10 +4,19 @@ import { generateJson } from "../../utils/genJson";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { createUser, updateUser } from "../services/auth.services";
-import { RegisterUserBody, VerifyEmailParams } from "../schemas/auth.schema";
+import {
+  createUser,
+  findUniqueUser,
+  updateUser,
+} from "../services/auth.services";
+import {
+  LoginUserBody,
+  RegisterUserBody,
+  VerifyEmailParams,
+} from "../schemas/auth.schema";
 import Email from "../../utils/email";
 import AppError from "../../utils/appError";
+import { signTokens } from "../../utils/jwt";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -120,19 +129,50 @@ export const verifyEmailHandler = async (
 };
 
 export const loginUserHandler = async (
-  req: Request,
+  req: Request<{}, {}, LoginUserBody>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    return res.status(200).json(
+    const { email, password } = req.body;
+
+    const user = await findUniqueUser(
+      { email: email.toLowerCase() },
+      { id: true, email: true, email_verified: true, password: true }
+    );
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return next(new AppError(400, "Invalid email or password"));
+    }
+
+    // Check if user is verified
+    if (!user.email_verified) {
+      return next(
+        new AppError(
+          401,
+          "You are not verified, please verify your email to login"
+        )
+      );
+    }
+
+    // Sign Tokens
+    const { access_token } = await signTokens(user);
+    res.cookie("access_token", access_token, accessTokenCookieOptions);
+    res.cookie("logged_in", true, {
+      ...accessTokenCookieOptions,
+      httpOnly: false,
+    });
+
+    res.status(200).json(
       generateJson({
         code: 200,
-        message: "In Development",
+        data: {
+          access_token,
+        },
       })
     );
-  } catch (error) {
-    next(error);
+  } catch (err: any) {
+    next(err);
   }
 };
 
@@ -143,12 +183,13 @@ export const logoutUserHandler = async (
 ) => {
   try {
     res.cookie("access_token", "", { maxAge: 1 });
-    res.cookie("refresh_token", "", { maxAge: 1 });
     res.cookie("logged_in", "", { maxAge: 1 });
 
-    res.status(200).json({
-      status: "success",
-    });
+    res.status(200).json(
+      generateJson({
+        code: 200,
+      })
+    );
   } catch (err: any) {
     next(err);
   }

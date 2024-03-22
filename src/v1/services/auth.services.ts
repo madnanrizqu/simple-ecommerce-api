@@ -14,3 +14,13 @@ export const updateUser = async (
 ) => {
   return (await db.users.update({ where, data, select })) as users;
 };
+
+export const findUniqueUser = async (
+  where: Prisma.usersWhereUniqueInput,
+  select?: Prisma.usersSelect
+) => {
+  return await db.users.findUnique({
+    where,
+    select,
+  });
+};

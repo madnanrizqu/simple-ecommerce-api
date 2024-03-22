@@ -6,7 +6,11 @@ import {
   verifyEmailHandler,
 } from "../controllers/auth.controller";
 import { validate } from "../../middewares/validate";
-import { registerUserSchema, verifyEmailSchema } from "../schemas/auth.schema";
+import {
+  loginUserSchema,
+  registerUserSchema,
+  verifyEmailSchema,
+} from "../schemas/auth.schema";
 
 const router = Router();
 
@@ -18,7 +22,7 @@ router.get(
   verifyEmailHandler
 );
 
-router.post("/login", loginUserHandler);
+router.post("/login", validate(loginUserSchema), loginUserHandler);
 
 router.post("/logout", logoutUserHandler);
 
