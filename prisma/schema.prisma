@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,80 +13,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum RecordStatus {
+enum user_type {
+  ADMIN
+  CUSTOMER
+}
+
+enum user_status {
   ACTIVE
   IN_ACTIVE
 }
 
-model Trainer {
-  id                 Int          @id @default(autoincrement())
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
-  email              String       @unique
-  password           String
-  name               String
-  whatsapp           String
-  rStatus            RecordStatus
-  contracts          Contract[]
-  passwordResetToken String?
-  passwordResetAt    DateTime?
-
-  @@unique([email, passwordResetToken])
-  @@index([email, passwordResetToken])
-}
-
-model Customer {
-  id                 Int          @id @default(autoincrement())
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
-  email              String       @unique
-  password           String
-  name               String
-  whatsapp           String
-  rStatus            RecordStatus
-  contracts          Contract[]
-  passwordResetToken String?
-  passwordResetAt    DateTime?
-
-  @@unique([email, passwordResetToken])
-  @@index([email, passwordResetToken])
-}
-
-enum ContractStatus {
+enum product_status {
   ACTIVE
   IN_ACTIVE
 }
 
-model Contract {
-  id                 Int            @id @default(autoincrement())
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  trainerId          Int
-  trainer            Trainer        @relation(fields: [trainerId], references: [id])
-  customerId         Int
-  customer           Customer       @relation(fields: [customerId], references: [id])
-  startTime          DateTime
-  endTime            DateTime
-  amount_of_exercise Int
-  exercises          Exercises[]
-  contractStatus     ContractStatus @default(ACTIVE)
-
-  @@index([trainerId, customerId])
+model users {
+  id                       Int         @id @default(autoincrement())
+  name                     String
+  email                    String
+  contact_number           String
+  contact_number_extension String
+  role                     user_type
+  password                 String
+  email_verification_code  String
+  email_verified           Boolean     @default(false)
+  deleted                  Boolean     @default(false)
+  status                   user_status
 }
 
-enum ExerciseStatus {
-  ACTIVE
-  PENDING
-  FINISHED
-}
-
-model Exercises {
-  id             Int            @id @default(autoincrement())
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  startTime      DateTime
-  endTime        DateTime?
-  contractId     Int
-  contract       Contract       @relation(fields: [contractId], references: [id])
-  exerciseStatus ExerciseStatus
+model products {
+  id         Int            @id @default(autoincrement())
+  name       String
+  price      Int
+  currency   String
+  created_at DateTime
+  deleted    Boolean        @default(false)
+  status     product_status
 }
