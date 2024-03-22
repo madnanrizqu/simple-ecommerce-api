@@ -1,4 +1,4 @@
-import { user_type } from "@prisma/client";
+import { Prisma, user_type, users } from "@prisma/client";
 import { TypeOf, object, string, z } from "zod";
 
 export const registerUserSchema = object({
@@ -53,3 +53,8 @@ export const userSensitiveExcludedFields = [
   "email_verification_code",
   "deleted",
 ];
+
+export type UserSanitized = Omit<
+  users,
+  "password" | "email_verified" | "email_verification_code" | "deleted"
+>;
