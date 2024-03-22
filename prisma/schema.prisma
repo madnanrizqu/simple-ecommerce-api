@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RecordStatus {
+  ACTIVE
+  IN_ACTIVE
+}
+
+model Trainer {
+  id                 Int          @id @default(autoincrement())
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  email              String       @unique
+  password           String
+  name               String
+  whatsapp           String
+  rStatus            RecordStatus
+  contracts          Contract[]
+  passwordResetToken String?
+  passwordResetAt    DateTime?
+
+  @@unique([email, passwordResetToken])
+  @@index([email, passwordResetToken])
+}
+
+model Customer {
+  id                 Int          @id @default(autoincrement())
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  email              String       @unique
+  password           String
+  name               String
+  whatsapp           String
+  rStatus            RecordStatus
+  contracts          Contract[]
+  passwordResetToken String?
+  passwordResetAt    DateTime?
+
+  @@unique([email, passwordResetToken])
+  @@index([email, passwordResetToken])
+}
+
+enum ContractStatus {
+  ACTIVE
+  IN_ACTIVE
+}
+
+model Contract {
+  id                 Int            @id @default(autoincrement())
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  trainerId          Int
+  trainer            Trainer        @relation(fields: [trainerId], references: [id])
+  customerId         Int
+  customer           Customer       @relation(fields: [customerId], references: [id])
+  startTime          DateTime
+  endTime            DateTime
+  amount_of_exercise Int
+  exercises          Exercises[]
+  contractStatus     ContractStatus @default(ACTIVE)
+
+  @@index([trainerId, customerId])
+}
+
+enum ExerciseStatus {
+  ACTIVE
+  PENDING
+  FINISHED
+}
+
+model Exercises {
+  id             Int            @id @default(autoincrement())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  startTime      DateTime
+  endTime        DateTime?
+  contractId     Int
+  contract       Contract       @relation(fields: [contractId], references: [id])
+  exerciseStatus ExerciseStatus
+}
