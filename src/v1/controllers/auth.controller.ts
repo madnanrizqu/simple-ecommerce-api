@@ -5,8 +5,9 @@ import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { createUser, updateUser } from "../services/auth.services";
-import { RegisterUserBody } from "../schemas/auth.schema";
+import { RegisterUserBody, VerifyEmailParams } from "../schemas/auth.schema";
 import Email from "../../utils/email";
+import AppError from "../../utils/appError";
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
@@ -83,19 +84,38 @@ export const registerUserHandler = async (
 };
 
 export const verifyEmailHandler = async (
-  req: Request,
+  req: Request<VerifyEmailParams>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    return res.status(200).json(
-      generateJson({
-        code: 200,
-        message: "In Development",
-      })
+    const verificationCode = crypto
+      .createHash("sha256")
+      .update(req.params.emailVerificationCode)
+      .digest("hex");
+
+    const user = await updateUser(
+      { email_verification_code: verificationCode },
+      { email_verified: true, email_verification_code: undefined },
+      { email: true }
     );
-  } catch (error) {
-    next(error);
+
+    if (!user) {
+      return next(new AppError(401, "Could not verify email"));
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Email verified successfully",
+    });
+  } catch (err: any) {
+    if (err.code === "P2025") {
+      return res.status(403).json({
+        status: "fail",
+        message: `Verification code is invalid or user doesn't exist`,
+      });
+    }
+    next(err);
   }
 };
 

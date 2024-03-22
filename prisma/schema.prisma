@@ -43,6 +43,7 @@ model users {
 
   @@unique([contact_number, contact_number_extension])
   @@unique([email])
+  @@unique([email_verification_code])
   @@index([contact_number, contact_number_extension])
   @@index([email])
 }

@@ -6,13 +6,17 @@ import {
   verifyEmailHandler,
 } from "../controllers/auth.controller";
 import { validate } from "../../middewares/validate";
-import { registerUserSchema } from "../schemas/auth.schema";
+import { registerUserSchema, verifyEmailSchema } from "../schemas/auth.schema";
 
 const router = Router();
 
 router.post("/register", validate(registerUserSchema), registerUserHandler);
 
-router.get("/verify_email/:email_verification_code", verifyEmailHandler);
+router.get(
+  "/verify_email/:emailVerificationCode",
+  validate(verifyEmailSchema),
+  verifyEmailHandler
+);
 
 router.post("/login", loginUserHandler);
 

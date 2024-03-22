@@ -25,3 +25,11 @@ export const registerUserSchema = object({
 });
 
 export type RegisterUserBody = TypeOf<typeof registerUserSchema>["body"];
+
+export const verifyEmailSchema = object({
+  params: object({
+    emailVerificationCode: string(),
+  }),
+});
+
+export type VerifyEmailParams = TypeOf<typeof verifyEmailSchema>["params"];
