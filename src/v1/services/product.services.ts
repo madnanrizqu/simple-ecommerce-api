@@ -19,3 +19,7 @@ export const updateProductById = async (
 ) => {
   return await db.products.update({ where: { id: productId }, data });
 };
+
+export const deleteProductById = async (productId: number) => {
+  return await db.products.delete({ where: { id: productId } });
+};

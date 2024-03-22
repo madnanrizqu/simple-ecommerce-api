@@ -47,3 +47,11 @@ export const updateProductSchema = object({
 
 export type UpdateProductBody = TypeOf<typeof updateProductSchema>["body"];
 export type UpdateProductParams = TypeOf<typeof updateProductSchema>["params"];
+
+export const deleteProductSchema = object({
+  params: object({
+    productId: string(),
+  }),
+});
+
+export type DeleteProductParams = TypeOf<typeof deleteProductSchema>["params"];

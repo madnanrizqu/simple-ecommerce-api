@@ -2,12 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { generateJson } from "../../utils/genJson";
 import {
   createProduct,
+  deleteProductById,
   getProductById,
   getProducts,
   updateProductById,
 } from "../services/product.services";
 import {
   CreateProductBody,
+  DeleteProductParams,
   GetProductParams,
   UpdateProductBody,
   UpdateProductParams,
@@ -104,6 +106,38 @@ export const updateProductHandler = async (
       generateJson({
         code: 200,
         data: updatedProduct,
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteProductHandler = async (
+  req: Request<DeleteProductParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const productId = Number(req.params.productId);
+
+    const product = await getProductById(productId);
+
+    if (!product) {
+      return res.status(404).json(
+        generateJson({
+          code: 404,
+          message: "Product not found",
+        })
+      );
+    }
+
+    await deleteProductById(productId);
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        message: "Product deleted",
       })
     );
   } catch (error) {
