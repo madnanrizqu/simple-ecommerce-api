@@ -39,3 +39,11 @@ export const updateUserSchema = object({
 
 export type UpdateUserParams = TypeOf<typeof updateUserSchema>["params"];
 export type UpdateUserBody = TypeOf<typeof updateUserSchema>["body"];
+
+export const deleteUserSchema = object({
+  params: object({
+    userId: string(),
+  }),
+});
+
+export type DeleteUserParams = TypeOf<typeof deleteUserSchema>["params"];
