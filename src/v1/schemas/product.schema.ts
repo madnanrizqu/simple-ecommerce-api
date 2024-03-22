@@ -1,4 +1,4 @@
-import { TypeOf, number, object, string } from "zod";
+import { TypeOf, number, object, optional, string } from "zod";
 
 export const createProductSchema = object({
   body: object({
@@ -23,3 +23,27 @@ export const getProductSchema = object({
 });
 
 export type GetProductParams = TypeOf<typeof getProductSchema>["params"];
+
+export const updateProductSchema = object({
+  params: object({
+    productId: string(),
+  }),
+  body: object({
+    name: optional(string()),
+    price: optional(number()),
+    currency: optional(string()),
+  }).refine(
+    (obj) => {
+      for (const val of Object.values(obj)) {
+        if (val !== undefined) return true;
+      }
+      return false;
+    },
+    {
+      message: "Must have at least one property defined",
+    }
+  ),
+});
+
+export type UpdateProductBody = TypeOf<typeof updateProductSchema>["body"];
+export type UpdateProductParams = TypeOf<typeof updateProductSchema>["params"];

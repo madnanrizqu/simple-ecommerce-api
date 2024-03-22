@@ -4,8 +4,14 @@ import {
   createProduct,
   getProductById,
   getProducts,
+  updateProductById,
 } from "../services/product.services";
-import { CreateProductBody, GetProductParams } from "../schemas/product.schema";
+import {
+  CreateProductBody,
+  GetProductParams,
+  UpdateProductBody,
+  UpdateProductParams,
+} from "../schemas/product.schema";
 
 export const getProductsHandler = async (
   req: Request,
@@ -62,6 +68,42 @@ export const getProductHandler = async (
         data: {
           products: await getProductById(productId),
         },
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProductHandler = async (
+  req: Request<UpdateProductParams, {}, UpdateProductBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const productId = Number(req.params.productId);
+
+    const product = await getProductById(productId);
+
+    if (!product) {
+      return res.status(404).json(
+        generateJson({
+          code: 404,
+          message: "Product not found",
+        })
+      );
+    }
+
+    const updatedProduct = await updateProductById(productId, {
+      currency: req.body.currency,
+      price: req.body.price,
+      name: req.body.name,
+    });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: updatedProduct,
       })
     );
   } catch (error) {
