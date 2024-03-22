@@ -13,6 +13,7 @@ import { validate } from "../../middlewares/validate";
 import {
   deleteUserSchema,
   getUserSchema,
+  getUsersSchema,
   updateUserSchema,
 } from "../schemas/user.schema";
 
@@ -24,7 +25,7 @@ router.get("/me", getMeHandler);
 
 router.use(onlyAdminRole);
 
-router.get("/", getUsersHandler);
+router.get("/", validate(getUsersSchema), getUsersHandler);
 
 router.get("/:userId", validate(getUserSchema), getUserHandler);
 

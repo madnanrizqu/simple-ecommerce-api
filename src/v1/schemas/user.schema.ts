@@ -45,3 +45,14 @@ export const deleteUserSchema = object({
 });
 
 export type DeleteUserParams = TypeOf<typeof deleteUserSchema>["params"];
+
+export const getUsersSchema = object({
+  query: optional(
+    object({
+      skip: optional(string().refine((v) => !isNaN(Number(v)))),
+      take: optional(string().refine((v) => !isNaN(Number(v)))),
+    })
+  ),
+});
+
+export type GetUsersQuery = TypeOf<typeof getUsersSchema>["query"];

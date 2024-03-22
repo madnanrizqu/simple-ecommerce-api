@@ -55,3 +55,14 @@ export const deleteProductSchema = object({
 });
 
 export type DeleteProductParams = TypeOf<typeof deleteProductSchema>["params"];
+
+export const getProductsSchema = object({
+  query: optional(
+    object({
+      skip: optional(string().refine((v) => !isNaN(Number(v)))),
+      take: optional(string().refine((v) => !isNaN(Number(v)))),
+    })
+  ),
+});
+
+export type GetProductsQuery = TypeOf<typeof getProductsSchema>["query"];

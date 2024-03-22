@@ -14,6 +14,7 @@ import {
   createProductSchema,
   deleteProductSchema,
   getProductSchema,
+  getProductsSchema,
   updateProductSchema,
 } from "../schemas/product.schema";
 
@@ -21,7 +22,7 @@ const router = express.Router();
 
 router.use(deserializeUser, requireUser);
 
-router.get("/", getProductsHandler);
+router.get("/", validate(getProductsSchema), getProductsHandler);
 
 router.use(onlyAdminRole);
 

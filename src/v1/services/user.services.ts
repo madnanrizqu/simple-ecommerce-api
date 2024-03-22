@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 import db from "../../db";
 
-export const getUsers = async () => {
-  return await db.users.findMany();
+export const getUsers = async (args?: { skip?: number; take?: number }) => {
+  return await db.users.findMany({ skip: args?.skip, take: args?.take });
 };
 
 export const getUserById = async (userId: number) => {

@@ -11,21 +11,27 @@ import {
   CreateProductBody,
   DeleteProductParams,
   GetProductParams,
+  GetProductsQuery,
   UpdateProductBody,
   UpdateProductParams,
 } from "../schemas/product.schema";
 
 export const getProductsHandler = async (
-  req: Request,
+  req: Request<{}, {}, {}, GetProductsQuery>,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    const args = {
+      ...(req.query?.skip ? { skip: Number(req.query.skip) } : {}),
+      ...(req.query?.take ? { take: Number(req.query.take) } : {}),
+    };
+
     return res.status(200).json(
       generateJson({
         code: 200,
         data: {
-          products: await getProducts(),
+          products: await getProducts(args),
         },
       })
     );
