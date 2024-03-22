@@ -107,7 +107,6 @@ export const updateUserHandler = async (
       contact_number: req.body.contactNumber,
       contact_number_extension: req.body.contactNumberExtension,
       name: req.body.name,
-      status: req.body.status,
       email: req.body.email,
       ...(req.body.password
         ? {

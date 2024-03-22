@@ -1,4 +1,3 @@
-import { user_status } from "@prisma/client";
 import { TypeOf, object, optional, string, z } from "zod";
 
 export const getUserSchema = object({
@@ -23,7 +22,6 @@ export const updateUserSchema = object({
         .min(6, "Password must be more than 6 characters")
         .max(32, "Password must be less than 32 characters")
     ),
-    status: optional(z.nativeEnum(user_status)),
   }).refine(
     (obj) => {
       for (const val of Object.values(obj)) {

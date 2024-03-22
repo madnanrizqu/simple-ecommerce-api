@@ -8,3 +8,7 @@ export const getProducts = async () => {
 export const createProduct = async (data: Prisma.productsCreateInput) => {
   return await db.products.create({ data });
 };
+
+export const getProductById = async (productId: number) => {
+  return await db.products.findUnique({ where: { id: productId } });
+};

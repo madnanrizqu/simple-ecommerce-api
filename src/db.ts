@@ -73,8 +73,6 @@ prisma.$use(async (params, next) => {
     }
   }
 
-  console.log("after params", params);
-
   return next(params);
 });
 

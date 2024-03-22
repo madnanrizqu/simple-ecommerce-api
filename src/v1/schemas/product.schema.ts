@@ -15,3 +15,11 @@ export const createProductSchema = object({
 });
 
 export type CreateProductBody = TypeOf<typeof createProductSchema>["body"];
+
+export const getProductSchema = object({
+  params: object({
+    productId: string(),
+  }),
+});
+
+export type GetProductParams = TypeOf<typeof getProductSchema>["params"];
