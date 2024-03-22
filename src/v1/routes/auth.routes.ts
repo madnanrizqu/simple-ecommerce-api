@@ -5,10 +5,12 @@ import {
   registerUserHandler,
   verifyEmailHandler,
 } from "../controllers/auth.controller";
+import { validate } from "../../middewares/validate";
+import { registerUserSchema } from "../schemas/auth.schema";
 
 const router = Router();
 
-router.post("/register", registerUserHandler);
+router.post("/register", validate(registerUserSchema), registerUserHandler);
 
 router.get("/verify_email/:email_verification_code", verifyEmailHandler);
 

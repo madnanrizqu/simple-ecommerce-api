@@ -7,7 +7,7 @@ import config from "config";
 import AppError from "./utils/appError";
 import { generateJson } from "./utils/genJson";
 
-// import v1Router from "./v1/routes";
+import v1Router from "./v1/routes";
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(cors());
 if (config.get("nodeEnv") === "development") app.use(morgan("dev"));
 
 // ROUTES
-// app.use("/api/v1", v1Router);
+app.use("/api/v1", v1Router);
 
 // HEALTH CHECK
 app.get("/api/health_check", (_, res: Response) => {

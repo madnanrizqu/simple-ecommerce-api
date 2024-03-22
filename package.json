@@ -22,11 +22,13 @@
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
+    "@types/html-to-text": "^9.0.4",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash.merge": "^4.6.9",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.10.6",
     "@types/nodemailer": "^6.4.14",
+    "@types/pug": "^2.0.10",
     "nodemon": "^3.0.2",
     "prisma": "^5.7.1",
     "ts-node": "^10.9.2",
@@ -43,11 +45,13 @@
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "express": "^4.18.2",
+    "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lodash.merge": "^4.6.2",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.8",
+    "pug": "^3.0.2",
     "zod": "^3.22.4"
   }
 }

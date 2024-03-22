@@ -39,7 +39,12 @@ model users {
   email_verification_code  String
   email_verified           Boolean     @default(false)
   deleted                  Boolean     @default(false)
-  status                   user_status
+  status                   user_status @default(ACTIVE)
+
+  @@unique([contact_number, contact_number_extension])
+  @@unique([email])
+  @@index([contact_number, contact_number_extension])
+  @@index([email])
 }
 
 model products {
