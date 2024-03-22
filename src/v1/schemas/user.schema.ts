@@ -51,6 +51,7 @@ export const getUsersSchema = object({
     object({
       skip: optional(string().refine((v) => !isNaN(Number(v)))),
       take: optional(string().refine((v) => !isNaN(Number(v)))),
+      name: optional(string()),
     })
   ),
 });

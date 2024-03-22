@@ -25,6 +25,7 @@ export const getProductsHandler = async (
     const args = {
       ...(req.query?.skip ? { skip: Number(req.query.skip) } : {}),
       ...(req.query?.take ? { take: Number(req.query.take) } : {}),
+      ...(req.query?.name ? { name: req.query.name } : {}),
     };
 
     return res.status(200).json(
