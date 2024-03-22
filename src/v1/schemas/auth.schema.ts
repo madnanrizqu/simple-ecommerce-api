@@ -46,3 +46,10 @@ export const loginUserSchema = object({
 });
 
 export type LoginUserBody = TypeOf<typeof loginUserSchema>["body"];
+
+export const userSensitiveExcludedFields = [
+  "password",
+  "email_verified",
+  "email_verification_code",
+  "deleted",
+];
