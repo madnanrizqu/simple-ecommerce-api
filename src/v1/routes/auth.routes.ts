@@ -5,7 +5,7 @@ import {
   registerUserHandler,
   verifyEmailHandler,
 } from "../controllers/auth.controller";
-import { validate } from "../../middewares/validate";
+import { validate } from "../../middlewares/validate";
 import {
   loginUserSchema,
   registerUserSchema,
