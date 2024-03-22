@@ -30,17 +30,6 @@ export const getUsersHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = res.locals.user as UserSanitized;
-
-    if (user.role !== "ADMIN") {
-      return res.status(401).json(
-        generateJson({
-          code: 401,
-          message: "You are not allowed to this operation",
-        })
-      );
-    }
-
     return res.status(200).json(
       generateJson({
         code: 200,
