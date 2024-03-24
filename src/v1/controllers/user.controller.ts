@@ -212,7 +212,7 @@ export const createUserHandler = async (
       contact_number: req.body.contactNumber,
       contact_number_extension: req.body.contactNumberExtension,
       email: req.body.email,
-      name: req.body.email,
+      name: req.body.name,
       role: req.body.role,
       email_verified: true,
     });
