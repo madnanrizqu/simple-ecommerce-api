@@ -15,6 +15,16 @@ You can view the available APIs here: https://documenter.getpostman.com/view/193
 
 This fullfills all frontend requirement except OAuth
 
+## Tech Used
+
+1. Node.js
+2. Express
+3. Prisma
+4. Postgress
+5. Docker
+6. Zod
+7. Jwt
+
 ## How to run locally?
 
 ### Prerequisites
