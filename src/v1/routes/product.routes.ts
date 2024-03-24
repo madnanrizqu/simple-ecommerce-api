@@ -6,6 +6,7 @@ import {
   deleteProductHandler,
   getProductHandler,
   getProductsHandler,
+  getProductsTotalHandler,
   updateProductHandler,
 } from "../controllers/product.controller";
 import { onlyAdminRole } from "../../middlewares/onlyAdminRole";
@@ -27,6 +28,8 @@ router.use(deserializeUser, requireUser);
 router.use(onlyAdminRole);
 
 router.post("/", validate(createProductSchema), createProductHandler);
+
+router.get("/total", getProductsTotalHandler);
 
 router.get("/:productId", validate(getProductSchema), getProductHandler);
 

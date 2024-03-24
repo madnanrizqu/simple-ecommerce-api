@@ -167,7 +167,7 @@ export const deleteUserHandler = async (
 };
 
 export const getUsersTotalHandler = async (
-  req: Request<DeleteUserParams>,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {

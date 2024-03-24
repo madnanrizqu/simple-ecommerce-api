@@ -6,11 +6,16 @@ export const getProducts = async (args?: {
   take?: number;
   name?: string;
 }) => {
-  return await db.products.findMany({
-    skip: args?.skip,
-    take: args?.take,
-    where: { name: { startsWith: args?.name } },
-  });
+  const [count, ...res] = await db.$transaction([
+    db.products.count(),
+    db.products.findMany({
+      skip: args?.skip,
+      take: args?.take,
+      where: { name: { startsWith: args?.name } },
+    }),
+  ]);
+
+  return { count, res: res[0] };
 };
 
 export const createProduct = async (data: Prisma.productsCreateInput) => {
@@ -30,4 +35,8 @@ export const updateProductById = async (
 
 export const deleteProductById = async (productId: number) => {
   return await db.products.delete({ where: { id: productId } });
+};
+
+export const getProductsTotal = async (where?: Prisma.productsWhereInput) => {
+  return await db.products.count({ where: where });
 };

@@ -5,6 +5,7 @@ import {
   deleteProductById,
   getProductById,
   getProducts,
+  getProductsTotal,
   updateProductById,
 } from "../services/product.services";
 import {
@@ -28,11 +29,14 @@ export const getProductsHandler = async (
       ...(req.query?.name ? { name: req.query.name } : {}),
     };
 
+    const data = await getProducts(args);
+
     return res.status(200).json(
       generateJson({
         code: 200,
         data: {
-          products: await getProducts(args),
+          products: data.res,
+          total: data.count,
         },
       })
     );
@@ -145,6 +149,30 @@ export const deleteProductHandler = async (
       generateJson({
         code: 200,
         message: "Product deleted",
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProductsTotalHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const resDeleted = await getProductsTotal({ deleted: true });
+    const resNotDeleted = await getProductsTotal({ deleted: false });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: {
+          deleted: resDeleted,
+          notDeleted: resNotDeleted,
+          total: resDeleted + resNotDeleted,
+        },
       })
     );
   } catch (error) {
