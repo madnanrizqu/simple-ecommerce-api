@@ -13,6 +13,10 @@ export const getUsers = async (args?: {
   });
 };
 
+export const getUsersTotal = async (where?: Prisma.usersWhereInput) => {
+  return await db.users.count({ where: where });
+};
+
 export const getUserById = async (userId: number) => {
   return await db.users.findUnique({ where: { id: userId } });
 };

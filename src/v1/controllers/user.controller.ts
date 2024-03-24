@@ -4,6 +4,7 @@ import {
   deleteUserById,
   getUserById,
   getUsers,
+  getUsersTotal,
   updateUserById,
 } from "../services/user.services";
 import {
@@ -158,6 +159,29 @@ export const deleteUserHandler = async (
       generateJson({
         code: 200,
         message: "User deleted",
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUsersTotalHandler = async (
+  req: Request<DeleteUserParams>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const resDeleted = await getUsersTotal({ deleted: true });
+    const resNotDeleted = await getUsersTotal({ deleted: false });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: {
+          deleted: resDeleted,
+          notDeleted: resNotDeleted,
+        },
       })
     );
   } catch (error) {

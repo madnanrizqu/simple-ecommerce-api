@@ -4,6 +4,7 @@ import {
   getMeHandler,
   getUserHandler,
   getUsersHandler,
+  getUsersTotalHandler,
   updateUserHandler,
 } from "../controllers/user.controller";
 import { deserializeUser } from "../../middlewares/deserializeUser";
@@ -26,6 +27,8 @@ router.get("/me", getMeHandler);
 router.use(onlyAdminRole);
 
 router.get("/", validate(getUsersSchema), getUsersHandler);
+
+router.get("/total", getUsersTotalHandler);
 
 router.get("/:userId", validate(getUserSchema), getUserHandler);
 
