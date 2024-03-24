@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "./scripts/run-dev-server.sh",
-    "build": "npx prisma db push && rm -rf ./dist && tsc",
+    "build": "npx prisma db push && pnpm run db:seed && rm -rf ./dist && tsc",
     "start": "NODE_ENV=production node ./dist/src/index.js",
     "db:start-dev": "docker compose up -d",
     "db:seed": "ts-node ./prisma/seed.ts",
