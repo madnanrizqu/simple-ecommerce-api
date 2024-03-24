@@ -1,9 +1,13 @@
 import { Prisma, users } from "@prisma/client";
 import db from "../../db";
 
-export const createUser = async (input: Prisma.usersCreateInput) => {
+export const createUser = async (
+  input: Prisma.usersCreateInput,
+  select?: Prisma.usersSelect
+) => {
   return await db.users.create({
     data: input,
+    select,
   });
 };
 

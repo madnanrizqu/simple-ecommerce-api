@@ -1,3 +1,4 @@
+import { user_type } from "@prisma/client";
 import { TypeOf, object, optional, string, z } from "zod";
 
 export const getUserSchema = object({
@@ -57,3 +58,28 @@ export const getUsersSchema = object({
 });
 
 export type GetUsersQuery = TypeOf<typeof getUsersSchema>["query"];
+
+export const createUserSchema = object({
+  body: object({
+    name: string({
+      required_error: "Name is required",
+    }),
+    email: string({
+      required_error: "Email address is required",
+    }).email("Invalid email address"),
+    contactNumber: string({
+      required_error: "Contact number is required",
+    }),
+    contactNumberExtension: string({
+      required_error: "Contact number extension is required",
+    }),
+    password: string({
+      required_error: "Password is required",
+    })
+      .min(6, "Password must be more than 6 characters")
+      .max(32, "Password must be less than 32 characters"),
+    role: z.nativeEnum(user_type),
+  }),
+});
+
+export type CreateUserBody = TypeOf<typeof createUserSchema>["body"];

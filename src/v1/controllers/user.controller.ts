@@ -8,6 +8,7 @@ import {
   updateUserById,
 } from "../services/user.services";
 import {
+  CreateUserBody,
   DeleteUserParams,
   GetUserParams,
   GetUsersQuery,
@@ -15,6 +16,10 @@ import {
   UpdateUserParams,
 } from "../schemas/user.schema";
 import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
+import { createUser } from "../services/auth.services";
+import { omit } from "lodash";
+import { userSensitiveExcludedFields } from "../schemas/auth.schema";
 
 export const getMeHandler = async (
   req: Request,
@@ -189,6 +194,46 @@ export const getUsersTotalHandler = async (
       })
     );
   } catch (error) {
+    next(error);
+  }
+};
+
+export const createUserHandler = async (
+  req: Request<{}, {}, CreateUserBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+    const user = await createUser({
+      password: hashedPassword,
+      contact_number: req.body.contactNumber,
+      contact_number_extension: req.body.contactNumberExtension,
+      email: req.body.email,
+      name: req.body.email,
+      role: req.body.role,
+      email_verified: true,
+    });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: {
+          user: omit(user, userSensitiveExcludedFields),
+        },
+      })
+    );
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return res.status(409).json({
+          status: "fail",
+          message:
+            "Email or contact number already exist, please provide another one",
+        });
+      }
+    }
     next(error);
   }
 };

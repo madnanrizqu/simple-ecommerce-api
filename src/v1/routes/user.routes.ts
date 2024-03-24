@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  createUserHandler,
   deleteUserHandler,
   getMeHandler,
   getUserHandler,
@@ -12,6 +13,7 @@ import { requireUser } from "../../middlewares/requireUser";
 import { onlyAdminRole } from "../../middlewares/onlyAdminRole";
 import { validate } from "../../middlewares/validate";
 import {
+  createUserSchema,
   deleteUserSchema,
   getUserSchema,
   getUsersSchema,
@@ -27,6 +29,8 @@ router.get("/me", getMeHandler);
 router.use(onlyAdminRole);
 
 router.get("/", validate(getUsersSchema), getUsersHandler);
+
+router.post("/", validate(createUserSchema), createUserHandler);
 
 router.get("/total", getUsersTotalHandler);
 
