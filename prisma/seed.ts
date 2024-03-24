@@ -66,6 +66,15 @@ async function main() {
         password: await bcrypt.hash("rahasia", 12),
         email_verified: true,
       },
+      {
+        name: "Vascomm",
+        email: "vascomm@gmail.com",
+        contact_number: "87654321",
+        role: "ADMIN",
+        contact_number_extension: "+62",
+        password: await bcrypt.hash("rahasia", 12),
+        email_verified: true,
+      },
       ...customers,
     ],
   });
