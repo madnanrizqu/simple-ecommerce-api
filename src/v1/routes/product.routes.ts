@@ -20,9 +20,9 @@ import {
 
 const router = express.Router();
 
-router.use(deserializeUser, requireUser);
-
 router.get("/", validate(getProductsSchema), getProductsHandler);
+
+router.use(deserializeUser, requireUser);
 
 router.use(onlyAdminRole);
 
