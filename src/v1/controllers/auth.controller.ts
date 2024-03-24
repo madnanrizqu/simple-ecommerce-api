@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
-  maxAge: config.get<number>("accessTokenExpiresIn") * 60 * 1000, // config number * 1 minute
+  maxAge: config.get<number>("accessTokenExpiresIn") * 36000 * 1000, // config number * 10 hour
 };
 
 export const registerUserHandler = async (
