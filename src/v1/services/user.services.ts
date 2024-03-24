@@ -6,11 +6,25 @@ export const getUsers = async (args?: {
   take?: number;
   name?: string;
 }) => {
-  return await db.users.findMany({
-    skip: args?.skip,
-    take: args?.take,
-    where: { name: { startsWith: args?.name } },
-  });
+  const [count, res] = await db.$transaction([
+    db.users.count(),
+    db.users.findMany({
+      skip: args?.skip,
+      take: args?.take,
+      where: { name: { startsWith: args?.name } },
+      select: {
+        id: true,
+        contact_number: true,
+        contact_number_extension: true,
+        deleted: true,
+        email: true,
+        name: true,
+        role: true,
+      },
+    }),
+  ]);
+
+  return { count, res };
 };
 
 export const getUsersTotal = async (where?: Prisma.usersWhereInput) => {

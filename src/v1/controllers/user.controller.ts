@@ -49,11 +49,14 @@ export const getUsersHandler = async (
       ...(req.query?.name ? { name: req.query.name } : {}),
     };
 
+    const data = await getUsers(args);
+
     return res.status(200).json(
       generateJson({
         code: 200,
         data: {
-          users: await getUsers(args),
+          users: data.res,
+          total: data.count,
         },
       })
     );

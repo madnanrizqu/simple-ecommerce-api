@@ -6,7 +6,7 @@ export const getProducts = async (args?: {
   take?: number;
   name?: string;
 }) => {
-  const [count, ...res] = await db.$transaction([
+  const [count, res] = await db.$transaction([
     db.products.count(),
     db.products.findMany({
       skip: args?.skip,
@@ -15,7 +15,7 @@ export const getProducts = async (args?: {
     }),
   ]);
 
-  return { count, res: res[0] };
+  return { count, res: res };
 };
 
 export const createProduct = async (data: Prisma.productsCreateInput) => {
