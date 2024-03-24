@@ -181,6 +181,7 @@ export const getUsersTotalHandler = async (
         data: {
           deleted: resDeleted,
           notDeleted: resNotDeleted,
+          total: resDeleted + resNotDeleted,
         },
       })
     );
