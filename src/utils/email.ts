@@ -3,6 +3,7 @@ import config from "config";
 import pug from "pug";
 import { convert } from "html-to-text";
 import { Prisma } from "@prisma/client";
+import { resolve } from "path";
 
 const smtp = config.get<{
   host: string;
@@ -34,11 +35,14 @@ export default class Email {
   private async send(template: string, subject: string) {
     try {
       // Generate HTML template based on the template string
-      const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
-        firstName: this.#firstName,
-        subject,
-        url: this.url,
-      });
+      const html = pug.renderFile(
+        resolve(`${__dirname}/../views/${template}.pug`),
+        {
+          firstName: this.#firstName,
+          subject,
+          url: this.url,
+        }
+      );
 
       // Create mailOptions
       const mailOptions = {
