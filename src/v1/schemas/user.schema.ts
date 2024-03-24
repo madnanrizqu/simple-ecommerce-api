@@ -23,6 +23,7 @@ export const updateUserSchema = object({
         .min(6, "Password must be more than 6 characters")
         .max(32, "Password must be less than 32 characters")
     ),
+    role: optional(z.nativeEnum(user_type)),
   }).refine(
     (obj) => {
       for (const val of Object.values(obj)) {

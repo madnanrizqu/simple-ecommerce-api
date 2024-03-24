@@ -124,6 +124,7 @@ export const updateUserHandler = async (
       contact_number_extension: req.body.contactNumberExtension,
       name: req.body.name,
       email: req.body.email,
+      role: req.body.role,
       ...(req.body.password
         ? {
             password: await bcrypt.hash(req.body.password, 12),
