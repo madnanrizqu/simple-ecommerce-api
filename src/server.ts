@@ -19,7 +19,7 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
 // 3. Cors
-app.use(cors());
+app.use(cors({ origin: [config.get<string>("frontendUrl")] }));
 
 // 4 Logger
 if (config.get("nodeEnv") === "development") app.use(morgan("dev"));
