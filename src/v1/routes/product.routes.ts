@@ -7,6 +7,7 @@ import {
   getProductHandler,
   getProductsHandler,
   getProductsTotalHandler,
+  getPublicProductsHandler,
   updateProductHandler,
 } from "../controllers/product.controller";
 import { onlyAdminRole } from "../../middlewares/onlyAdminRole";
@@ -21,11 +22,13 @@ import {
 
 const router = express.Router();
 
-router.get("/", validate(getProductsSchema), getProductsHandler);
+router.get("/public", validate(getProductsSchema), getPublicProductsHandler);
 
 router.use(deserializeUser, requireUser);
 
 router.use(onlyAdminRole);
+
+router.get("/", validate(getProductsSchema), getProductsHandler);
 
 router.post("/", validate(createProductSchema), createProductHandler);
 

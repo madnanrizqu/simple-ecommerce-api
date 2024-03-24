@@ -45,6 +45,34 @@ export const getProductsHandler = async (
   }
 };
 
+export const getPublicProductsHandler = async (
+  req: Request<{}, {}, {}, GetProductsQuery>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const args = {
+      ...(req.query?.skip ? { skip: Number(req.query.skip) } : {}),
+      ...(req.query?.take ? { take: Number(req.query.take) } : {}),
+      ...(req.query?.name ? { name: req.query.name } : {}),
+    };
+
+    const data = await getProducts({ ...args, where: { deleted: false } });
+
+    return res.status(200).json(
+      generateJson({
+        code: 200,
+        data: {
+          products: data.res,
+          total: data.count,
+        },
+      })
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createProductHandler = async (
   req: Request<{}, {}, CreateProductBody>,
   res: Response,

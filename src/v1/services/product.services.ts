@@ -5,13 +5,14 @@ export const getProducts = async (args?: {
   skip?: number;
   take?: number;
   name?: string;
+  where?: Prisma.productsWhereInput;
 }) => {
   const [count, res] = await db.$transaction([
     db.products.count(),
     db.products.findMany({
       skip: args?.skip,
       take: args?.take,
-      where: { name: { startsWith: args?.name } },
+      where: { name: { startsWith: args?.name }, ...args?.where },
     }),
   ]);
 

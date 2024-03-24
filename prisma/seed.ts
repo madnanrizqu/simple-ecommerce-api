@@ -22,7 +22,6 @@ const createCustomersData = async (numOfCustomers: number) => {
         password: await bcrypt.hash(`johndoe${v + 1}`, 12),
         email_verified: true,
         deleted: false,
-        status: "ACTIVE",
         email_verification_code: null,
       };
 
